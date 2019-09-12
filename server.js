@@ -17,7 +17,13 @@ app.use(express.json());
 
 // GET requests to /post
 app.get("/posts", (req, res) => {
-  BlogPost.find()  
+  
+  
+  
+  
+  
+  
+    BlogPost.find()  
     .then(blogposts => {
       res.json({
         blogposts: blogposts.map(blogpost => blogpost.serialize())
@@ -28,6 +34,10 @@ app.get("/posts", (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     });
 });
+
+
+
+
 
 // can also request by ID
 app.get("/posts/:id", (req, res) => {
@@ -52,13 +62,20 @@ app.post("/posts", (req, res) => {
       return res.status(400).send(message);
     }
   }
-
-  BlogPost.create({
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author,
-    created: req.body.created,
-  })
+  Author
+    .create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName, 
+        userName: req.body.userName
+    })
+    .then(author => {
+        BlogPost.create({
+            title: req.body.title,
+            content: req.body.content,
+            author: req.body.author,
+            created: req.body.created,
+        });   
+    })
     .then(blogpost => res.status(201).json(blogpost.serialize()))
     .catch(err => {
       console.error(err);

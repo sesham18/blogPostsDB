@@ -14,36 +14,6 @@ const blogpostsSchema = mongoose.Schema({
   comments: [commentSchema]
 });
 
-
-BlogPost
-  .findOne({
-    title: 'another title'
-  })
-  .populate('author')
-  .then(function (err, post) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(post.author.firstName, post.author.lastName);
-    }
-  });
-
-Author
-  .create({
-    "firstName": "Sarah",
-    "lastName": "Clarke",
-    "userName": "sarah.clarke"
-  })
-  .then(author => {
-    BlogPost
-      .create({
-        title: "another title",
-        content: "a bunch more amazing words",
-        author: author._id
-      });
-  });
-
-
 //Pre hook 
 blogpostsSchema.pre('findOne', function(next) {
     this.populate('author');
